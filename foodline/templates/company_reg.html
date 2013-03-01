@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form action="{% url company.views.registercompany %}" method="post">
+ {{ state }}
+ {{ form.as_p }}
+
+
+  <input type="submit" value="Submit" />
+</form>
+{% endblock %}
+

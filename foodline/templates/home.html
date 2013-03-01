@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<center>
+<div id="divhome">        
+
+    <h1> Welcome to Food Line </h1>
+</center>
+
+
+<a href="{% url company.views.customerlist %}"> view restaurants</a> &nbsp &nbsp
+<br><br>
+<a href="{% url company.views.recipeslist %}"> view recipes </a> <br><br>
+</div>
+{% endblock  %}
+

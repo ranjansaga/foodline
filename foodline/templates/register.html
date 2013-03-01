@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2> Welcome </h2> 
+
+<h1>
+ <a href="{% url company.views.registercustomer %}">I am a Customer in seek of Restaurants </a> 
+<br><br>
+     <a href="{% url company.views.registercompany %}" >I Want to advertise my Restaurant </a>
+    
+ </h1>
+{% endblock  %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+  Welcome, These are the Restaurants available
+ 
+{% for item in company_data %}
+<br><br>
+    <a href="/foodline/customerinfo/{{ item.id }}">{{ item.company_name}}</a><br>
+{% endfor %}
+{% endblock %}
+
+
+
+
+
+
+
+

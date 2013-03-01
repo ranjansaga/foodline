@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+Welcome , These are the customers in seek of restaurants 
+
+{% for item in customer_data %}
+               <br><br>
+     <a href="/foodline/companyinfo/{{ item.id }}">{{ item.customer.username }}</a><br>
+     
+     {% endfor %}
+     
+     
+{% endblock %}
+

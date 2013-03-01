@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<h1> Recipes: </h1>
+{% for item in recipes_data %}
+<br><br>
+    <a href="/foodline/recipesinfo/{{ item.id }}">{{ item.name}}</a><br>
+{% endfor %}
+
+    {% endblock %}

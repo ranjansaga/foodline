@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+ Company name:      {{ company_data.company_name }} <br>
+ Lodging Facility:  {{ company_data.lodging }} <br>
+ Home Delivery:     {{ company_data.home_delivery }} <br>
+ Cuisine :          {{ company_data.cuisine }} <br>
+ Email id:          {{ company_data.company.email}}<br>
+ Contact NO.:       {{ company_data.contact_no }} <br> <br> <br>
+ 
+ {% if request.user.is_authenticated %}
+ 
+   {% ifequal request.user.user_type customer %}
+ 
+      vote up : {{ review_data.voteup }} <a href="/foodline/voteup/{{ company_data.id }}">Vote up</a> <br>
+      vote down:{{ review_data.votedown}} <a href="/foodline/votedown/{{ company_data.id }}">Vote Down </a> 
+ 
+  {% endifequal %}
+    {% endif %}
+<br> <br>
+
+ 
+ {% endblock %}

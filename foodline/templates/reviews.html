@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+ Company name:      {{ company_data.company_name }} <br>
+ Lodging Facility:  {{ company_data.lodging }} <br>
+ Home Delivery:     {{ company_data.home_delivery }} <br>
+ Cuisine :          {{ company_data.cuisine }} <br>
+ Email id:          {{ company_data.company.email}}<br>
+ Contact NO.:       {{ company_data.contact_no }} <br> <br> <br>
+ 
+<br> <br>
+
+
+ 
+<h1> likes: {{ review_data.voteup }} </h1> <br>
+ 
+ <h1>dislikes:{{ review_data.votedown }} </h1>
+
+ {% endblock %}

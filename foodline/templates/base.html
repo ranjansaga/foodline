@@ -1,0 +1,93 @@
+<html>
+    <head>
+        <title>{{title}}</title>
+   {% block head %}
+        <style>    
+    body {
+        
+    background-color:rgba(150,220,100,0.7);
+    }
+
+   a { 
+       color:#044003;
+      }
+        
+
+    #divhome {
+        background-color:rgba(0,0,0,0.2);
+            
+        }  
+    
+    #login {
+        background-color:rgba(0,0,0,0.2);
+        margin:10px 500px; 
+        text-align:center;
+           }
+    h1 { 
+        background-color:rgba(0,0,0,0.2);      
+        color:#044003;      
+        margin-top:20px;
+
+       }
+    #twitter {
+    
+      margin: 10px 800px;
+      }
+        
+ 
+
+    
+</style>
+    {% endblock %}
+	 </head>
+     <body>
+         <center>  <h1> {{title}} </h1> </center>
+         <div id="divhome">
+             <div="login">
+              
+                {% if request.user.is_authenticated %}
+                {{ request.user.username }} || <a href="{% url company.views.logout_user %}"> Logout </a> &nbsp &nbsp
+
+               <a href="{% url company.views.home %}">Home </a> &nbsp &nbsp
+
+                {% else %}
+                Guest ||
+                     <a href="{% url company.views.home %}"> Home </a> &nbsp &nbsp    
+                     <a href="{% url company.views.register %}">Register</a> &nbsp &nbsp
+                     <a href="{% url company.views.login_user %}">Login</a> &nbsp &nbsp
+                {% endif %}
+                 </div>
+                   
+                   
+                   <div id="twitter">   
+                   
+               <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<br>                                                                
+<a href="https://twitter.com/ranjansaga" class="twitter-follow-button" data-show-count="false">Follow @ranjansaga</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+
+        </div>
+
+      {% block content %}{% endblock %}
+       </div> 
+          
+   
+     </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

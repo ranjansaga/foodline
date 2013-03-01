@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+  Welcome, These are the Restaurants available<br><br>  
+ <a href="{% url company.views.vegcustomerlist %}"> Veg </a> <br> <br>
+ <a href="{% url company.views.nonvegcustomerlist %}"> Non Veg </a><br><br>
+ <a href="{% url company.views.customerlist %}"> All Restaurants </a> <br><br>
+ 
+ Other options:<br><br>
+ <a href="{% url company.views.all_recipes %}"> Write a Recipe</a>  <br> <br>
+{% endblock %}
+
+
+
+
+
+
+
+
