@@ -57,6 +57,11 @@ class LoginForm(forms.Form):
 class ReviewsForm(forms.Form):
     reviews = forms.CharField()
     
-    
+
+class EventsForm(forms.Form):
+    event_name=forms.CharField(max_length=30)
+    event_date=forms.DateField()
+    event_time=forms.CharField()
+
 
 

@@ -25,7 +25,7 @@ class Recipes(models.Model):
 
 class CustomerChoice(models.Model):
 
-    cuisine=models.CharField(max_length = 30)
+    cuisiine=models.CharField(max_length = 30)
     home_delivery=models.BooleanField()
     lodging=models.BooleanField()
 
@@ -40,6 +40,12 @@ class Reviews(models.Model):
     votedown = models.IntegerField(null=True,default=0)
     reviews = models.CharField(max_length = 30,null=True)
     
+class Events(models.Model):
+    rest= models.ForeignKey(Company)
+    event_name=models.CharField(max_length=30)
+    event_date=models.DateField()
+    event_time=models.CharField(max_length=30)
 
-
-
+class JoinEvent(models.Model):
+    participant = models.ForeignKey(User)
+    event=models.ForeignKey(Events)

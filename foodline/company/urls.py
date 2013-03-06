@@ -19,5 +19,10 @@ urlpatterns = patterns('',
         url(r'^companyinfo/(?P<u_id>\d+)/$',views.companyinfo),
         url(r'^voteup/(?P<v_id>\d+)/$',views.voteup),        
         url(r'^votedown/(?P<vd_id>\d+)/$',views.votedown),
+        url(r'^registerevent/$',views.registerevent),
+        url(r'^eventslist/$',views.eventsinfo),
+        url(r'^joinevent/(?P<e_id>\d+)/$',views.joinevent),
+        #url(r'^participants/(?P<e_id>\d+)/$',views.joined_users),
+
         #url(r'^reviews/(?P<re_id>\d+)/$',views.re_views),
         )

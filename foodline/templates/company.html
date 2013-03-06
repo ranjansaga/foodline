@@ -9,7 +9,8 @@ Welcome , These are the customers in seek of restaurants
      <a href="/foodline/companyinfo/{{ item.id }}">{{ item.customer.username }}</a><br>
      
      {% endfor %}
-     
-     
+
+
+     <a href="{% url company.views.registerevent %}"> Create an event.. </a> <br><br>
 {% endblock %}
 

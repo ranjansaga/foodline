@@ -2,18 +2,21 @@ from django.shortcuts import render_to_response
 from forms import RegisterCustomerForm
 from forms import RegisterCompanyForm
 from forms import LoginForm
-from forms import RecipesForm,ReviewsForm
+from forms import RecipesForm,ReviewsForm,EventsForm
 from company.models import Customer
 from company.models import Company  
-from company.models import UserProfile,Recipes,Reviews
+from company.models import UserProfile,Recipes,Reviews,Events,JoinEvent
 from django.contrib.auth.models import User
 from django.http import HttpResponse,HttpResponseRedirect
 from django import http
 from django.contrib.auth import authenticate, login ,logout
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
+
+from django.core.mail import send_mail
+
 def home(request):
-    return render_to_response('home.html')
+    return render_to_response('home.html',locals())
 
 
 def register(request):
@@ -33,8 +36,12 @@ def registercustomer(request):
             last_name = form.cleaned_data['last_name'],
             email = form.cleaned_data['email'],
             password = form.cleaned_data['password'], 
-
             )
+            user.repassword = form.cleaned_data['repassword']
+            if user.repassword != user.password:
+                state="password and repassword not matching "
+                eform=form
+                return render_to_response('customers_reg.html',locals())
 
             user.set_password(str(form.cleaned_data['password']))
             user.save()
@@ -51,7 +58,7 @@ def registercustomer(request):
                    user_type="customer",
                    )
             current_user.save()
-
+            #send_mail('Registeration-Foodline', ' Welcome to foodline ', 'foodline77@gmail.com', [user.email])
 
             return HttpResponseRedirect('/foodline/login/')
         else:
@@ -82,6 +89,13 @@ def registercompany(request):
             email = form.cleaned_data['email'],
             password = form.cleaned_data['password'],                                          
             )
+            user.repassword = form.cleaned_data['repassword']
+            
+            if user.repassword != user.password:
+                state="password and repassword not matching "
+                eform=form
+                return render_to_response('company_reg.html',locals())
+                
             user.set_password(str(form.cleaned_data['password']))
             user.save()
 
@@ -103,7 +117,7 @@ def registercompany(request):
                    user_type="company",
                    )
             current_user.save()
-
+            #send_mail('Registeration -Foodline', ' Welcome to foodline, ', 'foodline77@gmail.com', [user.email])
             
             return HttpResponseRedirect('/foodline/login/')
         else:
@@ -115,6 +129,7 @@ def registercompany(request):
         form=RegisterCompanyForm()
         return render_to_response('company_reg.html',locals())
 
+         
 
 
 def all_recipes(request):
@@ -142,7 +157,6 @@ def recipesinfo(request, l_id):
         
 
 
-
 def login_user(request):
   
     username = password = ''
@@ -153,12 +167,15 @@ def login_user(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            request_user=UserProfile.objects.get(user=user)
-            #print request_user.user_type            
-            if request_user.user_type=="customer":
-                return HttpResponseRedirect('/foodline/customerhome/')
+            if user.is_staff:
+                return render_to_response('home.html',locals())
             else:
-                return HttpResponseRedirect('/foodline/companylist/')
+                request_user=UserProfile.objects.get(user=user)
+            #print request_user.user_type            
+                if request_user.user_type=="customer":
+                    return HttpResponseRedirect('/foodline/customerhome/')
+                else:
+                    return HttpResponseRedirect('/foodline/companylist/')
         else:
             form=LoginForm()
             return render_to_response('login.html',locals())
@@ -238,6 +255,58 @@ def companyinfo(request,u_id):
     print customer_data
     return render_to_response('companyinfo.html',locals())    
  
+
+
+def registerevent(request):
+    if request.method== 'POST':
+        form=EventsForm(request.POST)
+        if form.is_valid():
+            events=Events.objects.create(
+            rest=Company.objects.get(company=request.user),
+            event_name=form.cleaned_data['event_name'],
+            event_date=form.cleaned_data['event_date'],
+            event_time=form.cleaned_data['event_time'],
+            )
+            events.save()
+            return HttpResponseRedirect('/')
+        else:    
+            state="please fill in all fields properly"
+            eform=form
+            return render_to_response('event_reg.html',locals())
+    else:
+        state="Welcome,fill the form to register"
+        form=EventsForm()
+        return render_to_response('event_reg.html',locals())
+
+
    
-   
+def eventsinfo(request):
+    event_data=Events.objects.all()
+    return render_to_response('events.html',locals())
+
+def joinevent(request,e_id):
+
+    if request.user.is_authenticated:
+        jevent=JoinEvent.objects.create(
+                participant=request.user,
+                event=Events.objects.get(id=e_id),
+                )
+        jevent.save()
+        users_data = JoinEvent.objects.all()
+        return render_to_response('joinedusers.html',locals())
+    else:
+        return HttpResponseRedirect('/foodline/register/')
+
+#def joined_users(request,e_id):
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
