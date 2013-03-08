@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<label class= "participant_name"> Participant name: </label>&nbsp;&nbsp;&nbsp;&nbsp; <label class ="events" > event name </label>   
+<br><br>{% for item in users_data %}
+                
+             
+            <label class= "participant_name"> {{ item.participant }}</label class= "events"> &nbsp;&nbsp;&nbsp;&nbsp; <label>{{ item.event.event_name }}  
+              </label><br> <br>
+ {% endfor %}
+<br>
+
+
+
+{% endblock %}

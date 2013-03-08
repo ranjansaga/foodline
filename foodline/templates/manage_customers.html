@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+s
+ 
+
+{% for item in customer_data %}
+               <br><br>
+     <a href="/foodline/customerdata/{{ item.id }}">{{ item.customer.username }}</a><br>
+     
+     {% endfor %}
+
+    
+
+{% endblock %} 

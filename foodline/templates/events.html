@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}               
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+    </script>  
+</head>
+
+<body>
+{% for item in user_part_of  %}
+
+ Event Name :      {{ item.event_name }} <br>
+ Event date :      {{ item.event_date }} <br>
+ Event Time :      {{ item.event_time }} <br>
+ Location   :      {{ item.location }} &nbsp &nbsp  &nbsp &nbsp 
+ 
+
+ 
+{% if not item.is_part and request.user.is_authenticated %}  <a  href="/foodline/joinevent/{{item.id}}" class="event">Join Event</a>{% endif %}
+  
+  <br/>
+  <br/>
+
+ {% endfor %}
+
+
+ 
+   
+   
+
+ 
+
+ {% endblock %}

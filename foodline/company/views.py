@@ -3,6 +3,7 @@ from forms import RegisterCustomerForm
 from forms import RegisterCompanyForm
 from forms import LoginForm
 from forms import RecipesForm,ReviewsForm,EventsForm
+from forms import ChangePassword,ForgotPassword,ResetForm
 from company.models import Customer
 from company.models import Company  
 from company.models import UserProfile,Recipes,Reviews,Events,JoinEvent
@@ -14,6 +15,7 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     return render_to_response('home.html',locals())
@@ -129,7 +131,7 @@ def registercompany(request):
         form=RegisterCompanyForm()
         return render_to_response('company_reg.html',locals())
 
-         
+######################### recipes ######################################3         
 
 
 def all_recipes(request):
@@ -155,7 +157,7 @@ def recipesinfo(request, l_id):
     recipes_data=Recipes.objects.get(id=l_id)
     return render_to_response('recipesinfo.html',locals())
         
-
+########################### login / logout ###################################
 
 def login_user(request):
   
@@ -217,6 +219,10 @@ def customerinfo(request,r_id):
     print company_data
     return render_to_response('customerinfo.html',locals())
 
+
+################### voteup / vote down #########################################
+
+
 def voteup(request,v_id):
     review_data = Reviews.objects.get(id =v_id )
     review_data.voteup = review_data.voteup + 1;
@@ -255,7 +261,7 @@ def companyinfo(request,u_id):
     print customer_data
     return render_to_response('companyinfo.html',locals())    
  
-
+########## events ############################################################3
 
 def registerevent(request):
     if request.method== 'POST':
@@ -279,34 +285,128 @@ def registerevent(request):
         return render_to_response('event_reg.html',locals())
 
 
-   
+@login_required   
 def eventsinfo(request):
     event_data=Events.objects.all()
+    user_part_of = []
+    print event_data
+    for event in event_data:
+        has_joined = JoinEvent.objects.filter(participant = request.user, event= event)
+        s = {"id":event.id, "event_name": event.event_name, "event_date":event.event_date, "event_time": event.event_time, "location":event.rest.company_name}
+        if has_joined:
+            s["is_part"] = True
+        else :
+            s["is_part"] = False
+        user_part_of.append(s)
+    print user_part_of
     return render_to_response('events.html',locals())
 
-def joinevent(request,e_id):
 
+@login_required
+def joinevent(request,e_id):
     if request.user.is_authenticated:
         jevent=JoinEvent.objects.create(
                 participant=request.user,
                 event=Events.objects.get(id=e_id),
                 )
         jevent.save()
-        users_data = JoinEvent.objects.all()
-        return render_to_response('joinedusers.html',locals())
+        return HttpResponseRedirect('/foodline/eventslist')
+        #users_data = JoinEvent.objects.all()
+        #return render_to_response('joinedusers.html',locals())
     else:
         return HttpResponseRedirect('/foodline/register/')
 
-#def joined_users(request,e_id):
+
+########################### ADMIN  ####################################################3    
+
+def manage_customers(request):
+    customer_data=Customer.objects.all()
+    return render_to_response('manage_customers.html',locals())
+ 
+
+def customer_details(request,d_id):
+    customer_data=Customer.objects.get(id = d_id)
+    return render_to_response('cust_data.html',locals())
+
+
+def delete_customer(request,cust_id):
+    customer_data=Customer.objects.get(id=cust_id).delete()
+    return HttpResponseRedirect('/foodline/managecustomers/')
+    
+            
+def manage_companies(request):
+    company_data=Company.objects.all()
+    return render_to_response('manage_companies.html',locals())    
     
     
+def company_details(request,dd_id):
+    company_data=Company.objects.get(id = dd_id)
+    return render_to_response('comp_data.html',locals())   
     
-    
-    
-    
-    
-    
-    
-    
-    
+def delete_company(request,comp_id):
+    company_data=Company.objects.get(id=comp_id).delete()
+    return HttpResponseRedirect('/foodline/managecompanies/')
+
+##########################################################################################
+
+def forgot_password(request):
+    if request.method=="POST":
+        form=ForgotPassword(request.POST)
+        if form.is_valid():
+            username=form.cleaned_data['username']
+            print username
+            user=User.objects.get(username=username)
+            print user
+            if user is not None:
+                link="http://127.0.0.1:8000/foodline/reset/"
+                send_mail("RESET PASSWORD",link,"foodline77@gmail.com",[user.email])
+                return HttpResponseRedirect('/foodline/login/')
+            else:
+                return render_to_response('home.html',locals())
+        else:
+            reg_form=form
+            return render_to_response('forgot_password.html',locals())
+    else:
+        form=ForgotPassword()
+        state="Please enter Username"
+        return render_to_response('forgot_password.html',locals())
+                       
+
+
+
+def reset_password(request):
+    if request.method=="POST":
+        form=ResetForm(request.POST)
+        if form.is_valid():
+            username=form.cleaned_data['username']
+            user=User.objects.get(username=username)
+            print user
+            user.set_password(str(form.cleaned_data['password']))
+            user.save()
+            return HttpResponseRedirect('/foodline/login/')
+        else:
+            reg_form=form
+            return render_to_response('re_password.html',locals())
+    else:
+        form=ResetForm()
+        state="Please enter your new password"
+        return render_to_response('re_password.html',locals())
+               
+
+def change_password(request):
+    if request.method=="POST":
+        form=ChangePassword(request.POST)
+        if form.is_valid():
+            register_user=User.objects.get(username=request.user.username)
+            register_user.set_password(str(form.cleaned_data['password']))
+            register_user.save()
+            return HttpResponseRedirect('/foodline/login/')
+        else:
+            state="please enter a new password"
+            return render_to_response('reset.html',locals())
+    else:
+        form=ChangePassword()
+        state="Enter a New Password"
+        return render_to_response('reset.html',locals())
+ 
 

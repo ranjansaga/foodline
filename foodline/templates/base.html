@@ -47,6 +47,8 @@
     
 </style>
     {% endblock %}
+   
+	
 	 </head>
      <body>
          <center>  <h1> {{title}} </h1> </center>
@@ -54,17 +56,21 @@
              <div="login">
               
                 {% if request.user.is_authenticated %}
-                {{ request.user.username }} || <a href="{% url company.views.logout_user %}"> Logout </a> &nbsp &nbsp
-
-               <a href="{% url company.views.home %}">Home </a> &nbsp &nbsp
+                {{ request.user.username }} || 
+                <a href="{% url company.views.logout_user %}"> Logout </a> &nbsp &nbsp
+                <a href="{% url company.views.home %}">Home </a> &nbsp &nbsp
+                <a href="{% url company.views.change_password %}" > Change Password </a>
 
                 {% else %}
                 Guest ||
-                     <a href="{% url company.views.home %}"> Home </a> &nbsp &nbsp    
+                     <a id="aa" href="{% url company.views.home %}"> Home </a> &nbsp &nbsp    
                      <a href="{% url company.views.register %}">Register</a> &nbsp &nbsp
                      <a href="{% url company.views.login_user %}">Login</a> &nbsp &nbsp
+                     <a href="{% url company.views.forgot_password %}">Forgot password</a> &nbsp &nbsp
                 {% endif %}
                  </div>
+                   
+          
                    
                    
                    <div id="twitter">   

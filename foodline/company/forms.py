@@ -62,6 +62,16 @@ class EventsForm(forms.Form):
     event_name=forms.CharField(max_length=30)
     event_date=forms.DateField()
     event_time=forms.CharField()
-
+    
+    
+class ChangePassword(forms.Form):
+    password= forms.CharField(widget=forms.PasswordInput)
+    
+class ForgotPassword(forms.Form):
+    username = forms.CharField(max_length = 30)
+    
+class ResetForm(forms.Form):
+    username = forms.CharField(max_length = 30)
+    password = forms.CharField(widget=forms.PasswordInput)
 
 
